@@ -5,7 +5,7 @@ import { Scroll, Timer } from "@phosphor-icons/react";
 
 export default function Header() {
   return (
-    <div className="flex w-full items-center justify-between gap-2 p-2">
+    <div className="flex w-full items-center justify-between gap-2 px-10">
       <img src={logoImage} />
       <nav className="flex justify-between gap-2">
         <NavLink to="/" className="p-2">
