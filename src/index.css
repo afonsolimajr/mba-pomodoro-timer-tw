@@ -1,19 +1,6 @@
 @import "tailwindcss";
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
   --green-dark: #015f43;
   --green: #00875f;
   --green-light: #00b37e;
@@ -29,6 +16,21 @@
   --text: #c4c4cc;
   --title: #e1e1e6;
   --white: #ffffff;
+  --yellow-dark: #fbab50;
+
+  font-family: roboto, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
 }
 
 a {
@@ -60,8 +62,10 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: 1.5em;
   line-height: 1.1;
+  font-weight: bold;
+  color: var(--title);
 }
 
 button {
@@ -87,3 +91,15 @@ input {
   
 }
 
+title {
+  color: var(--title);
+  font-size: 2rem;
+}
+
+.listHeader {
+  background-color: var(--divider);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
