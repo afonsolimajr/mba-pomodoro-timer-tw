@@ -3,8 +3,9 @@ import BigPanel from "../components/BigPanel";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as zod from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Cycle } from "../interfaces/Cycle.interface";
+import { differenceInSeconds } from "date-fns";
 
 const validationSchema = zod.object({
   task: zod.string().min(1, "Informe a tarefa"),
@@ -50,6 +51,7 @@ export default function Home() {
       id,
       task: data.task,
       minutesAmount: data.minutesAmount,
+      startDate: new Date(),
     };
 
     setCycles((prevState) => {
@@ -61,7 +63,15 @@ export default function Home() {
     reset();
   }
 
-  console.log("active cycle", activeCycle);
+  useEffect(() => {
+    if (activeCycle) {
+      setInterval(() => {
+        setAmountSencondsPassed(
+          differenceInSeconds(new Date(), activeCycle.startDate)
+        );
+      }, 1000);
+    }
+  }, [activeCycle]);
 
   return (
     <form onSubmit={handleSubmit(handleCreateNewCycle)}>
