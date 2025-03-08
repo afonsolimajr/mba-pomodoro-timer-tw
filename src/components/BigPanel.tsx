@@ -8,8 +8,8 @@ export default function BigPanel() {
         <BigNumber />
       </div>
       <div className="hidden sm:flex flex-col gap-6 items-center justify-center h-full">
-        <div className="flex h-5 w-5 rounded-full bg-[var(--green)]" />
-        <div className="flex h-5 w-5 rounded-full bg-[var(--green)]" />
+        <div className="flex h-8 w-8 rounded-full bg-[var(--green)]" />
+        <div className="flex h-8 w-8 rounded-full bg-[var(--green)]" />
       </div>
       <div className="flex gap-5 items-center justify-center">
         <BigNumber />

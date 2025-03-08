@@ -5,7 +5,7 @@ export default function History() {
     <div className="mx-5 sm:mx-25">
       <h1>Meu histórico</h1>
       <div className="flex flex-col gap-1">
-        <div className="flex px-4 py-6 items-center justify-between gap-14 bg-[var(--divider)]">
+        <div className="hidden md:flex px-4 py-6 items-center justify-between gap-14 bg-[var(--divider)]">
           <span className="w-5/12">Tarefa</span>
           <div className="flex w-7/12 items-center justify-between gap-14">
             <span className="w-full">Duração</span>
@@ -20,13 +20,13 @@ export default function History() {
           status="Em andamento"
         />
         <HistoryItem
-          description="Desenvolvimento web"
+          description="Desenvolvimento backend"
           duration={40}
           interval={10}
           status="Interrompido"
         />
         <HistoryItem
-          description="Desenvolvimento web"
+          description="Desenvolvimento mobile"
           duration={60}
           interval={60}
           status="Concluído"
