@@ -19,6 +19,7 @@ type NewCycleFormData = zod.infer<typeof validationSchema>;
 export default function Home() {
   const [cycles, setCycles] = useState<Cycle[]>([]);
   const [activeCycleId, setActiveCycleId] = useState<string | null>("");
+  const [amountSecondsPassed, setAmountSencondsPassed] = useState(0);
 
   const { register, handleSubmit, watch, reset } = useForm<NewCycleFormData>({
     resolver: zodResolver(validationSchema),
@@ -29,6 +30,15 @@ export default function Home() {
   });
 
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId);
+
+  // const totalSeconds = activeCycle ? activeCycle.minutesAmount : 0;
+  // const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0;
+
+  // const minutesAmount = Math.floor(currentSeconds / 60);
+  // const secondsAmount = currentSeconds % 60;
+
+  // const minutesFormatted = String(minutesAmount).padStart(2, "0");
+  // const secondsFormatted = String(secondsAmount).padStart(2, "0");
 
   const task = watch("task");
   const amount = watch("minutesAmount");
@@ -80,7 +90,10 @@ export default function Home() {
             <span>minutos.</span>
           </div>
         </div>
-        <BigPanel />
+        <BigPanel
+          activeCycle={activeCycle}
+          amountSecondsPassed={amountSecondsPassed}
+        />
         <div className="flex w-full px-3 justify-center items-center">
           <button
             disabled={isSubmitDisabled}
