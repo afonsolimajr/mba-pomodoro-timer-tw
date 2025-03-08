@@ -3,6 +3,8 @@ import BigPanel from "../components/BigPanel";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as zod from "zod";
+import { useState } from "react";
+import { Cycle } from "../interfaces/Cycle.interface";
 
 const validationSchema = zod.object({
   task: zod.string().min(1, "Informe a tarefa"),
@@ -12,14 +14,12 @@ const validationSchema = zod.object({
     .max(60, "Intervalo máximo de 60 minutos."),
 });
 
-// interface NewCycleFormData {
-//   task: string;
-//   minutesAmount: number;
-// }
-
 type NewCycleFormData = zod.infer<typeof validationSchema>;
 
 export default function Home() {
+  const [cycles, setCycles] = useState<Cycle[]>([]);
+  const [activeCycleId, setActiveCycleId] = useState<string | null>("");
+
   const { register, handleSubmit, watch, reset } = useForm<NewCycleFormData>({
     resolver: zodResolver(validationSchema),
     defaultValues: {
@@ -28,14 +28,30 @@ export default function Home() {
     },
   });
 
+  const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId);
+
   const task = watch("task");
   const amount = watch("minutesAmount");
   const isSubmitDisabled = !task && !amount;
 
   function handleCreateNewCycle(data: NewCycleFormData) {
-    console.log("data", data);
+    const id = String(new Date().getTime());
+    const newCycle: Cycle = {
+      id,
+      task: data.task,
+      minutesAmount: data.minutesAmount,
+    };
+
+    setCycles((prevState) => {
+      return [...prevState, newCycle];
+    });
+
+    setActiveCycleId(id);
+
     reset();
   }
+
+  console.log("active cycle", activeCycle);
 
   return (
     <form onSubmit={handleSubmit(handleCreateNewCycle)}>
