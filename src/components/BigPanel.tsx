@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Cycle } from "../interfaces/Cycle.interface";
 import BigNumber from "./BigNumber";
 
@@ -16,6 +17,12 @@ export default function BigPanel({
 
   const minutesFormatted = String(minutesAmount).padStart(2, "0");
   const secondsFormatted = String(secondsAmount).padStart(2, "0");
+
+  useEffect(() => {
+    if (activeCycle) {
+      document.title = `${minutesFormatted}:${secondsFormatted}`;
+    }
+  }, [minutesFormatted, secondsFormatted, activeCycle]);
 
   return (
     <div className="flex flex-col sm:flex-row gap-5 items-center justify-center">

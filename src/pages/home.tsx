@@ -32,15 +32,6 @@ export default function Home() {
 
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId);
 
-  // const totalSeconds = activeCycle ? activeCycle.minutesAmount : 0;
-  // const currentSeconds = activeCycle ? totalSeconds - amountSecondsPassed : 0;
-
-  // const minutesAmount = Math.floor(currentSeconds / 60);
-  // const secondsAmount = currentSeconds % 60;
-
-  // const minutesFormatted = String(minutesAmount).padStart(2, "0");
-  // const secondsFormatted = String(secondsAmount).padStart(2, "0");
-
   const task = watch("task");
   const amount = watch("minutesAmount");
   const isSubmitDisabled = !task && !amount;
@@ -59,18 +50,25 @@ export default function Home() {
     });
 
     setActiveCycleId(id);
+    setAmountSencondsPassed(0);
 
     reset();
   }
 
   useEffect(() => {
+    let interval: number;
+
     if (activeCycle) {
-      setInterval(() => {
+      interval = setInterval(() => {
         setAmountSencondsPassed(
           differenceInSeconds(new Date(), activeCycle.startDate)
         );
       }, 1000);
     }
+
+    return () => {
+      clearInterval(interval);
+    };
   }, [activeCycle]);
 
   return (
