@@ -1,4 +1,4 @@
-import { Play } from "@phosphor-icons/react";
+import { HandPalm, Play } from "@phosphor-icons/react";
 import BigPanel from "../components/BigPanel";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -55,6 +55,20 @@ export default function Home() {
     reset();
   }
 
+  function handleInterruptCycle() {
+    setCycles(
+      cycles.map((cycle) => {
+        if (cycle.id === activeCycleId) {
+          return { ...cycle, interruptedDate: new Date() };
+        } else {
+          return cycle;
+        }
+      })
+    );
+
+    setActiveCycleId(null);
+  }
+
   useEffect(() => {
     let interval: number;
 
@@ -79,6 +93,7 @@ export default function Home() {
           <input
             id="task"
             placeholder="Dê um nome para o seu projeto"
+            disabled={!!activeCycle}
             className=""
             {...register("task")}
           />
@@ -92,6 +107,7 @@ export default function Home() {
               step={5}
               min={5}
               max={60}
+              disabled={!!activeCycle}
               className="w-12 text-center border-b"
               {...register("minutesAmount", { valueAsNumber: true })}
             />
@@ -103,12 +119,23 @@ export default function Home() {
           amountSecondsPassed={amountSecondsPassed}
         />
         <div className="flex w-full px-3 justify-center items-center">
-          <button
-            disabled={isSubmitDisabled}
-            className="flex gap-3 w-full max-w-2xl bg-green-800 items-center justify-center"
-          >
-            <Play size={28} /> Começar
-          </button>
+          {activeCycle ? (
+            <button
+              type="button"
+              onClick={handleInterruptCycle}
+              className="flex gap-3 w-full max-w-2xl bg-red-700 items-center justify-center"
+            >
+              <HandPalm size={28} /> Interromper
+            </button>
+          ) : (
+            <button
+              type="submit"
+              disabled={isSubmitDisabled}
+              className="flex gap-3 w-full max-w-2xl bg-green-800 items-center justify-center"
+            >
+              <Play size={28} /> Começar
+            </button>
+          )}
         </div>
       </div>
     </form>
