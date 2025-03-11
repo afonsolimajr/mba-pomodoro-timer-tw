@@ -1,6 +1,10 @@
+import { useContext } from "react";
 import HistoryItem from "../components/HistoryItem";
+import { CyclesContext } from "../contexts/CyclesContext";
 
 export default function History() {
+  const { cycles } = useContext(CyclesContext);
+
   return (
     <div className="mx-5 sm:mx-25">
       <h1>Meu histórico</h1>
@@ -13,24 +17,17 @@ export default function History() {
             <span className="w-full">Status</span>
           </div>
         </div>
-        <HistoryItem
-          description="Desenvolvimento web"
-          duration={25}
-          interval={15}
-          status="Em andamento"
-        />
-        <HistoryItem
-          description="Desenvolvimento backend"
-          duration={40}
-          interval={10}
-          status="Interrompido"
-        />
-        <HistoryItem
-          description="Desenvolvimento mobile"
-          duration={60}
-          interval={60}
-          status="Concluído"
-        />
+        {cycles.map((cycle) => {
+          return (
+            <HistoryItem
+              key={cycle.id}
+              cycle={cycle}
+              description={cycle.task}
+              duration={cycle.minutesAmount}
+              interval={cycle.startDate}
+            />
+          );
+        })}
       </div>
     </div>
   );

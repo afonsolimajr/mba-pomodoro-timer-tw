@@ -24,7 +24,7 @@ export default function Home() {
     amountSecondsPassed,
   } = useContext(CyclesContext);
 
-  const { register, handleSubmit, watch } = useForm<NewCycleFormData>({
+  const { register, handleSubmit, watch, reset } = useForm<NewCycleFormData>({
     resolver: zodResolver(validationSchema),
     defaultValues: {
       task: "",
@@ -36,8 +36,13 @@ export default function Home() {
   const amount = watch("minutesAmount");
   const isSubmitDisabled = !task && !amount;
 
+  function handleCreateNewCycle(data: NewCycleFormData) {
+    createNewCycle(data);
+    reset();
+  }
+
   return (
-    <form onSubmit={handleSubmit(createNewCycle)}>
+    <form onSubmit={handleSubmit(handleCreateNewCycle)}>
       <div className="flex flex-col w-full h-full items-center justify-center gap-10 md:gap-20">
         <div className="flex w-full max-w-2xl flex-col md:flex-row  items-center justify-between gap-2">
           <label htmlFor="description">Vou trabalhar em</label>
