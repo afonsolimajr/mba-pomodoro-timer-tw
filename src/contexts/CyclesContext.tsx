@@ -66,14 +66,38 @@ export function CyclesContextProvider({ children }: { children: ReactNode }) {
     setActiveCycleId(null);
   }
 
+  function setActiveCycleAsFinished() {
+    setCycles(
+      cycles.map((cycle) => {
+        if (cycle.id === activeCycleId) {
+          return { ...cycle, finishedDate: new Date() };
+        } else {
+          return cycle;
+        }
+      })
+    );
+
+    setActiveCycleId(null);
+  }
+
   useEffect(() => {
     let interval: number;
 
     if (activeCycle) {
       interval = setInterval(() => {
-        setAmountSencondsPassed(
-          differenceInSeconds(new Date(), activeCycle.startDate)
+        const totalSeconds = activeCycle.minutesAmount * 60;
+        const secondsPassed = differenceInSeconds(
+          new Date(),
+          activeCycle.startDate
         );
+
+        if (secondsPassed > totalSeconds) {
+          setActiveCycleAsFinished();
+        } else {
+          setAmountSencondsPassed(
+            differenceInSeconds(new Date(), activeCycle.startDate)
+          );
+        }
       }, 1000);
     }
 
