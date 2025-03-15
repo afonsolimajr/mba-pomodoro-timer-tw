@@ -1,6 +1,18 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 import { Cycle } from "../interfaces/Cycle.interface";
 import { differenceInSeconds } from "date-fns";
+import { cyclesReducer } from "../reducers/cycles/reducer";
+import {
+  addNewCycleAction,
+  interruptCurrentCycleAction,
+  setCurrentCycleAsFinishedAction,
+} from "../reducers/cycles/actions";
 
 interface CreateCycleData {
   task: string;
@@ -21,8 +33,13 @@ interface CyclesContextType {
 export const CyclesContext = createContext({} as CyclesContextType);
 
 export function CyclesContextProvider({ children }: { children: ReactNode }) {
-  const [cycles, setCycles] = useState<Cycle[]>([]);
-  const [activeCycleId, setActiveCycleId] = useState<string | null>("");
+  const [cyclesState, dispatch] = useReducer(cyclesReducer, {
+    cycles: [],
+    activeCycleId: null,
+  });
+
+  const { cycles, activeCycleId } = cyclesState;
+
   const [amountSecondsPassed, setAmountSencondsPassed] = useState(0);
 
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId);
@@ -42,42 +59,17 @@ export function CyclesContextProvider({ children }: { children: ReactNode }) {
       startDate: new Date(),
     };
 
-    setCycles((prevState) => {
-      return [...prevState, newCycle];
-    });
+    dispatch(addNewCycleAction(newCycle));
 
-    setActiveCycleId(id);
     setAmountSencondsPassed(0);
-
-    // reset();
   }
 
   function interrupCurrentCycle() {
-    setCycles(
-      cycles.map((cycle) => {
-        if (cycle.id === activeCycleId) {
-          return { ...cycle, interruptedDate: new Date() };
-        } else {
-          return cycle;
-        }
-      })
-    );
-
-    setActiveCycleId(null);
+    dispatch(setCurrentCycleAsFinishedAction());
   }
 
   function setActiveCycleAsFinished() {
-    setCycles(
-      cycles.map((cycle) => {
-        if (cycle.id === activeCycleId) {
-          return { ...cycle, finishedDate: new Date() };
-        } else {
-          return cycle;
-        }
-      })
-    );
-
-    setActiveCycleId(null);
+    dispatch(interruptCurrentCycleAction());
   }
 
   useEffect(() => {
