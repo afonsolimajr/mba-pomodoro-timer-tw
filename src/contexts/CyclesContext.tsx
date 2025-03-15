@@ -33,10 +33,24 @@ interface CyclesContextType {
 export const CyclesContext = createContext({} as CyclesContextType);
 
 export function CyclesContextProvider({ children }: { children: ReactNode }) {
-  const [cyclesState, dispatch] = useReducer(cyclesReducer, {
-    cycles: [],
-    activeCycleId: null,
-  });
+  const [cyclesState, dispatch] = useReducer(
+    cyclesReducer,
+    {
+      cycles: [],
+      activeCycleId: null,
+    },
+    (initalState) => {
+      const storedStateAsJSON = localStorage.getItem(
+        "@mba-pomodoro:cycles-state"
+      );
+
+      if (storedStateAsJSON) {
+        return JSON.parse(storedStateAsJSON);
+      }
+
+      return initalState;
+    }
+  );
 
   const { cycles, activeCycleId } = cyclesState;
 
@@ -97,6 +111,12 @@ export function CyclesContextProvider({ children }: { children: ReactNode }) {
       clearInterval(interval);
     };
   }, [activeCycle]);
+
+  useEffect(() => {
+    const stateJSON = JSON.stringify(cyclesState);
+
+    localStorage.setItem("@mba-pomodoro:cycles-state", stateJSON);
+  }, [cyclesState]);
 
   return (
     <CyclesContext.Provider
